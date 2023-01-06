@@ -71,7 +71,6 @@ class DicomApp : Runnable, Logging {
      * Init
      */
     override fun run() {
-        // clear inputs
         val format = "/*$".toRegex()
         dir = dir.replace(format, "")
         out = out.replace(format, "")
@@ -88,7 +87,7 @@ class DicomApp : Runnable, Logging {
                     }
                 }
             } else {
-                logger.error("An error was detected while read directory $dir, the reason \"No such directory\".")
+                logger.error(ProcessMessage.NO_SUCH_DIRECTORY.m.format(dir))
             }
         }
     }
@@ -100,7 +99,7 @@ class DicomApp : Runnable, Logging {
         DicomInputStream(dicomDir).run {
             val dicomObject = readDicomObject()
             if (dicomObject.isEmpty) {
-                logger.error("An error was detected while reading ${dicomDir.parent}/DICOMDIR file, the reason \"DicomObject is empty\"")
+                logger.error(ProcessMessage.DICOM_OBJECT_IS_EMPTY.m.format(dicomDir.parent))
             }
             dicomObject.datasetIterator().forEach {
                 if (it.hasItems()) {
@@ -127,7 +126,7 @@ class DicomApp : Runnable, Logging {
                                     ?.component1()
 
                                 if (!File(input).isFile) {
-                                    logger.error("An error was detected while reading DICOMDIR file, the reason \"No such file $input registered in DICOMDIR with study date $date\"")
+                                    logger.error(ProcessMessage.NO_SUCH_FILE_REGISTERED_IN_DICOM.m.format(input, date))
                                     continue
                                 }
 
@@ -142,8 +141,9 @@ class DicomApp : Runnable, Logging {
                                         reader.input = iss
                                         if (reader.formatName == "dicom" && reader.getNumImages(true) > 0) {
                                             val image = reader.read(0)
+                                            val pathname = "$output/${image.width}x${image.height}/${fileName}.$extension"
                                             val file =
-                                                File("$output/${image.width}x${image.height}/${fileName}.$extension")
+                                                File(pathname)
                                                     .also { file ->
                                                         file.parentFile.mkdirs()
                                                     }
@@ -153,8 +153,8 @@ class DicomApp : Runnable, Logging {
                                                 file.outputStream()
                                             ).also { result ->
                                                 when (result) {
-                                                    true -> logger.info("Transcending data to image file \"$output/${image.width}x${image.height}/${fileName}.png\" succeed!")
-                                                    else -> logger.error("Unexpected error")
+                                                    true -> logger.info(ProcessMessage.SUCCESS.m.format(pathname))
+                                                    else -> logger.error(ProcessMessage.UNEXPECTED_ERROR.m)
                                                 }
                                             }
                                         }
