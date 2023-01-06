@@ -58,6 +58,16 @@ class DicomApp : Runnable, Logging {
     var extension = "png"
 
     /**
+     * Study date
+     */
+    private lateinit var date: String
+
+    /**
+     * Output path
+     */
+    private lateinit var output: String
+
+    /**
      * Init
      */
     override fun run() {
@@ -94,8 +104,6 @@ class DicomApp : Runnable, Logging {
             }
             dicomObject.datasetIterator().forEach {
                 if (it.hasItems()) {
-                    var date = ""
-                    var output = ""
                     for (i in 0 until it.countItems()) {
                         val em = it.getDicomObject(i).getString(Tag.DirectoryRecordType)
                         val currentDicomObject = it.getDicomObject(i)
