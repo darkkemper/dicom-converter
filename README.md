@@ -1,12 +1,13 @@
-# DICOM file converter
+# DICOM file converter 
+[![License](https://img.shields.io/:license-Apache%202-blue.svg?style=flat-square)](https://github.com/darkkemper/dicom-converter/blob/master/LICENSE)
 
 This repository contains the **sourcecode** of app **converting DICOM files to png with `kotlin`**
 
-### Building
+## Building
 
 To build a combined JAR of project and runtime dependencies use `buildFatJar`
 
-### To run it locally use this command
+## To run it locally use this command
 
 ```bash
 java -jar build/libs/dicom-converter.0.0.1.jar
