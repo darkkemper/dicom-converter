@@ -8,6 +8,12 @@ To build a combined JAR of project and runtime dependencies use `buildFatJar`
 
 ### To run it locally use this command
 
+```bash
+java -jar build/libs/dicom-converter.0.0.1.jar
 ```
-java -jar build/libs/dicom-converter.0.0.1.jar -d path_to_CT_or_MRI_dir/ -o out/ -e png
-```
+
+| Program arguments | Default           | Description                                |
+|-------------------|-------------------|--------------------------------------------|
+| -d, --directory   | working directory | Directory containing DICOMDIR file         |
+| -o, --out         | out/              | Output directory for converted image files |
+| -e, --extension   | png               | Extension for output file [png, jpg]       |
